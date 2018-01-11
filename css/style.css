@@ -1,0 +1,87 @@
+.header ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+.header li {
+    float: left;
+}
+
+.header li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.header li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+    background-color: #4CAF50;
+}
+
+.header {
+	position: absolute;
+	width: 100%;
+	height: 120px;
+	top: 0px;
+	left: 0px;
+	background-color: black;
+	background-image: -webkit-linear-gradient(bottom, lightgrey 50%, grey 100%);
+}
+
+.container {
+	position: relative;
+	top: 170px;
+}
+
+.navbar {
+	position: absolute;
+	top: 65px;
+	width: 100%;
+	height: 30px;
+	background-color: transparent;
+}
+
+.left1 {
+	left: 30px;
+}
+
+ul.products li {
+    width: 200px;
+    display: inline-block;
+    border: 1px solid rgba(226, 226, 226, 0.4);
+    background: rgba(226, 226, 226, 0.4);
+}
+
+ul.products li {
+    width: 200px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+ul.products li {
+    width: 200px;
+    display: inline-block;
+    vertical-align: top;
+    *display: inline;
+    *zoom: 1;
+}
+
+.product-img {
+	width: 100%
+}
+
+.title {
+	color: grey;
+}
+
+.price {
+	color: orange;
+}

@@ -1,0 +1,43 @@
+.header{
+	position: absolute;
+	width: 100%;
+	height: 50px;
+	left: 0;
+	top: 0;
+	background-color: black;
+	background-image: -webkit-linear-gradient(top, black 0%, #595a5b 100%);
+}
+
+.title{
+	position: relative;
+	text-align: center;
+	bottom: 15px;
+	background: -webkit-linear-gradient(white, #dbf2fc);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.container{
+	position: relative;
+	top: 50px;
+}
+
+.tbla , .tblb, .tblc{
+	position: relative;
+	width: 100%;
+	left: 0;
+	text-align: center;
+}
+
+.tbla {
+	top: 100%;
+}
+
+.tblb {
+	top: -5px;
+
+}
+
+.tblc {
+	top: 5px;
+}
