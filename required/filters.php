@@ -1,7 +1,11 @@
 <center><p>
-			<a href="#" style="color: grey;">Rose</a> -
-			<a href="#" style="color: grey;">Bleu</a> -
-			<a href="#" style="color: grey;">Rouge</a> -
-			<a href="#" style="color: grey;">Orange</a>
-		</p></center>
-		<br>
+	<?php
+		require_once 'database.php';
+
+		$req = $pdo->query('SELECT * FROM categories_ref');
+		foreach ($req as $key) {
+			echo '- <a href="index?cat=' .$key->id .'" style="color: grey;">' .$key->name .'</a> -';
+		}
+	?>
+</p></center>
+<br>

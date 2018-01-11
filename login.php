@@ -10,10 +10,7 @@ if (isset($_SESSION['auth']->id))
 
 if (!empty($_POST))
 {
-	if(isset($_POST['login']))
-	{
 		//login
-
 		//verif field
 		if(empty($_POST['logusername']) && empty($_POST['logpsw'])){
 	        $_SESSION['flash']['danger'] = "Please fill all field !"; 
@@ -40,7 +37,7 @@ if (!empty($_POST))
         $req = $pdo->prepare("SELECT * FROM users WHERE username = :username");
         $req->execute(['username' => $_POST['logusername']]);
         $user = $req->fetch();
-
+        
         if(password_verify($_POST['logpsw'], $user->password)){
             $_SESSION['auth'] = $user;
             $_SESSION['flash']['success'] = "Connexion réussie !";
@@ -52,104 +49,30 @@ if (!empty($_POST))
             exit();
 
         }
-	}
-	else
-	{
-		//register
-
-		//verif field not empty
-		if (empty($_POST['regusername']) || empty($_POST['regpsw']) || empty($_POST['regpswr']))
-		{
-			$_SESSION['flash']['danger'] = "Please fill all fields.";
-			header('Location: login.php');
-			exit();
-		}
-
-		//verif format username field
-		if (!preg_match('/^[a-zA-Z0-9]+$/', $_POST['regusername']))
-		{ 
-			$_SESSION['flash']['danger'] = "Invalid username. Allowed char : a-z A-Z 0-9";
-			header('Location: login.php');
-			exit();
-		}
-
-		//verif psw are the same
-		if ($_POST['regpsw'] != $_POST['regpswr'])
-		{
-			$_SESSION['flash']['danger'] = "Password must be the same.";
-			header('Location: login.php');
-			exit();
-		}
-
-		//verif psw size
-		if (strlen($_POST['regpsw']) < 6 || strlen($_POST['regpsw']) > 10)
-		{
-			$_SESSION['flash']['danger'] = "Invalid password size. Minimum 6 Maximum 10.";
-			header('Location: login.php');
-			exit();
-		}
-
-		//Verify user exists
-		require_once 'required/database.php';
-        $req = $pdo->prepare('SELECT id FROM users WHERE username = ?');
-        $req->execute([$_POST['regusername']]);
-        $user = $req->fetch();
-        if($user)
-        {
-        	$_SESSION['flash']['danger'] = "Username already taken.";
-			header('Location: login.php');
-			exit();
-        }
-
-        //register user
-        require_once 'required/database.php';
-        require_once 'required/functions.php';
-        try
-        {
-	        $req = $pdo->prepare("INSERT INTO users SET username = ?, password = ?");
-            $password = password_hash($_POST['regpsw'], PASSWORD_BCRYPT);
-            $token = str_random(60);
-           	$req->execute([$_POST['regusername'], $password]);
-
-           	$user_id = $pdo->lastinsertid();
-           	$_SESSION['flash']['success'] = "SUCCESS - Account created, please connect !";
-           	header('Location: login.php');
-            exit();
-        }
-        catch (Exception $e)
-        {
-            die('Erreur : ' . $e->getMessage());
-        }
-	}
 }
-
-require_once 'required/header.php';
 ?>
-	<div class="container">
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="css/register.css">
+	<title>Login</title>
+</head>
+<body>
+	<div class="content">
+		<a style="top: 8px; left: 16px;" href="index.php">< Go back to index</a>
+		<a style="top: 8px; right: 16px;" href="register.php">Create account</a>
+		<img class="logo" src="img/TamagoSHOP.png">
 		<?php require_once 'required/flash.php'; ?>
-		<div class="login-container">
-			<center><label class="login-title">Login</label></center>
-			<form method="POST">
-				<center>
-					<br>
-					<input type="text" name="logusername" placeholder="username"><br>
-					<input type="password" name="logpsw" placeholder="psw"><br>
-					<button class="button" name="login" value="login">Login</button>
-				</center>
-			</form>
-			<hr/>
-			<center><label class="login-title">Register</label></center>
-			<form method="POST">
-				<center>
-					<br>
-					<input type="text" name="regusername" placeholder="username">
-					<input type="password" name="regpsw" placeholder="psw">
-					<input type="password" name="regpswr" placeholder="pswr">
-					<button class="button" name="register" value="register">Register</button>
-				</center>
-			</form>
-		</div>
+
+		<form method="POST">
+			<center><input style="margin-top: 10%;" type="text" name="logusername" placeholder="Login"></center>
+			<br>
+			<center><input type="password" name="logpsw" placeholder="Password"/></center>
+			<br>
+			<center><button class="btn" name="logbtn" value="login">LOGIN</button></center>
+		</form>
 	</div>
-	
+
 </body>
 </html>

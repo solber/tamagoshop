@@ -15,9 +15,8 @@ if (!empty($_POST))
 	//adding product
 	if (isset($_POST['addbtn']))
 	{
-		if (empty($_POST['name']) || empty($_POST['price']) || !preg_match('/^[0-9,]+$/', $_POST['price']))
+		if (empty($_POST['name']) || empty($_POST['price']) || !preg_match('/^[0-9.]+$/', $_POST['price']) || empty($_POST['img']))
 		{
-			
 			$_SESSION['flash']['danger'] = "Error wrong values";
 			header('Location: manage_product.php');
 			exit();
@@ -25,7 +24,7 @@ if (!empty($_POST))
 		else
 		{
 			require_once 'required/database.php';
-			if ($req = $pdo->query("INSERT INTO `products` (`id`, `name`, `price`, `img`) VALUES (NULL, '".$_POST['name'] ."', '" .floatval($_POST['price']) ."', '')"))
+			if ($req = $pdo->query("INSERT INTO `products` (`id`, `name`, `price`, `img`) VALUES (NULL, '".$_POST['name'] ."', '" .floatval($_POST['price']) ."', '" .$_POST['img'] ."')"))
 			{
 				$_SESSION['flash']['success'] = "Item added";
 				header('Location: manage_product.php');
@@ -43,7 +42,7 @@ if (!empty($_POST))
 	//modifying product
 	if (isset($_POST['modbtn']))
 	{
-		if (empty($_POST['modid']) || empty($_POST['modname']) || empty($_POST['modprice']) || !preg_match('/^[0-9]+$/', $_POST['modid']) || !preg_match('/^[0-9,]+$/', $_POST['modprice']))
+		if (empty($_POST['modid']) || empty($_POST['modname']) || empty($_POST['modprice']) || !preg_match('/^[0-9]+$/', $_POST['modid']) || !preg_match('/^[0-9.]+$/', $_POST['modprice']))
 		{
 			$_SESSION['flash']['danger'] = "Error wrong values";
 			header('Location: manage_product.php');
@@ -360,6 +359,7 @@ if (!empty($_POST))
 			<form method="POST">
 				<input type="text" name="name" placeholder="name">
 				<input type="text" name="price" placeholder="price">
+				<input type="text" name="img" placeholder="ex: img/file.jpg">
 				<input type="submit" name="addbtn" value="Valider">
 			</form>
 			<label>Modify Product</label>

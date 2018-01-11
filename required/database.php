@@ -1,7 +1,7 @@
 <?php
 try
 {
-$pdo = new PDO('mysql:host=localhost;dbname=rush', 'root', 'toor');
+$pdo = new PDO('mysql:host=localhost;dbname=rush', 'root', '');
 
 //$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXEPTION);
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);

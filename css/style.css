@@ -18,12 +18,15 @@
     text-decoration: none;
 }
 
+a {
+    text-decoration: none;
+}
 .header li a:hover:not(.active) {
-    background-color: #111;
+    background-color: #d862ef;
 }
 
 .active {
-    background-color: #4CAF50;
+    background-color: #d862ef;
 }
 
 .header {
