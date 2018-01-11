@@ -8,8 +8,6 @@ if (isset($_SESSION['auth']->id))
 	exit();
 }
 
-require_once 'required/flash.php';
-
 if (!empty($_POST))
 {
 	if(isset($_POST['login']))
@@ -50,7 +48,7 @@ if (!empty($_POST))
             exit();
         }else{
             $_SESSION['flash']['danger'] = "Invalid username or password !";
-            header('Location: index.php');
+            header('Location: login.php');
             exit();
 
         }
@@ -125,26 +123,33 @@ if (!empty($_POST))
 	}
 }
 
+require_once 'required/header.php';
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-	<title>login</title>
-</head>
-<body>
-	<label>Login</label>
-	<form method="POST">
-		<input type="text" name="logusername" placeholder="username">
-		<input type="password" name="logpsw" placeholder="psw">
-		<input type="submit" name="login" value="login">
-	</form>
-	<label>Register</label>
-	<form method="POST">
-		<input type="text" name="regusername" placeholder="username">
-		<input type="password" name="regpsw" placeholder="psw">
-		<input type="password" name="regpswr" placeholder="pswr">
-		<input type="submit" name="register" value="register">
-	</form>
+	<div class="container">
+		<?php require_once 'required/flash.php'; ?>
+		<div class="login-container">
+			<center><label class="login-title">Login</label></center>
+			<form method="POST">
+				<center>
+					<br>
+					<input type="text" name="logusername" placeholder="username"><br>
+					<input type="password" name="logpsw" placeholder="psw"><br>
+					<button class="button" name="login" value="login">Login</button>
+				</center>
+			</form>
+			<hr/>
+			<center><label class="login-title">Register</label></center>
+			<form method="POST">
+				<center>
+					<br>
+					<input type="text" name="regusername" placeholder="username">
+					<input type="password" name="regpsw" placeholder="psw">
+					<input type="password" name="regpswr" placeholder="pswr">
+					<button class="button" name="register" value="register">Register</button>
+				</center>
+			</form>
+		</div>
+	</div>
+	
 </body>
 </html>

@@ -1,7 +1,7 @@
 <?php include('required/header.php'); ?>
 	<div class="container">
+		<?php require_once 'required/flash.php'; ?>
 		<?php include('required/filters.php'); ?>
-
 		<ul class="products">
 		    <li>
 		        <a href="#">

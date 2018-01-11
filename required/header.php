@@ -8,7 +8,6 @@ if (session_status() == PHP_SESSION_NONE) { session_start(); }
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="./css/style.css">
-  <link rel="stylesheet" type="text/css" href="./css/flash.css">
   <title>TamagoShop</title>
 </head>
 
@@ -18,8 +17,13 @@ if (session_status() == PHP_SESSION_NONE) { session_start(); }
     <center><img class="img-logo" src="img/TamagoShop.png" title="logo" alt="Logo"></center>
     <ul>
       <li><a class="active" href="#home">Home</a></li>
-      <li><a href="#news">Signin</a></li>
-      <li><a href="#contact">Signup</a></li>
-      <li><a href="#about">Signout</a></li>
+      <?php if (isset($_SESSION['auth']->id))
+              echo '<li><a href="logout.php">Signout</a></li>';
+              else
+              {
+                echo '<li><a href="login.php">Signin</a></li>';
+                echo '<li><a href="login.php">Signup</a></li>';
+              }
+      ?>
     </ul>
   </div>
