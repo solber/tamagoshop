@@ -1,0 +1,3 @@
+<Files "req.sql">
+    Deny from all
+</Files>
