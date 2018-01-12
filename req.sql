@@ -3,13 +3,10 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  ven. 12 jan. 2018 à 00:22
--- Version du serveur :  5.7.19
+-- Généré le :  ven. 12 jan. 2018 à 21:36
+-- Version du serveur :  5.7.19-log
 -- Version de PHP :  5.6.31
-
-
 USE rush;
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
@@ -61,6 +58,22 @@ CREATE TABLE IF NOT EXISTS `op_user` (
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE IF NOT EXISTS `orders` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `buyer_id` int(11) NOT NULL,
+  `cmd_id` varchar(255) NOT NULL,
+  `product` int(11) NOT NULL,
+  `qty` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 

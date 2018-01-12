@@ -10,13 +10,32 @@
 				header('Location: cart.php');
 				exit();
 			}
+
+			if (isset($_POST['buybtn']))
+			{
+				require_once 'required/database.php';
+				require_once 'required/functions.php';
+				$order_id = str_random(60);
+				foreach ($_SESSION['bought'] as $key => $value) {
+					if (!($req = $pdo->query("INSERT INTO orders (id, buyer_id, cmd_id, product, qty) VALUES (NULL, '" .intval($_SESSION['auth']->id) ."', '" .$order_id ."', '" .intval($key) ."', '" .intval($value) ."')")))
+					{
+						$_SESSION['flash']['danger'] = "Error while processing to order.";
+						header('Location: cart.php');
+						exit();
+					}
+				}
+				$_SESSION['flash']['success'] = "Order success.";
+				unset($_SESSION['cart']);
+				unset($_SESSION['bought']);
+				header('Location: cart.php');
+				exit();
+			}
 		}
 
 		if (isset($_SESSION['cart']))
 		{
 			$all = array();
 			$curr = array();
-			$nb_curr = array();
 			foreach ($_SESSION['cart'] as $products) {
 				$all[] .= $products;
 			}
@@ -27,6 +46,8 @@
 			foreach ($all as $key => $val) {
 				$curr[$val] += 1;
 			}
+			$_SESSION['bought'] = array();
+			$_SESSION['bought'] = $curr;
 		//var_dump($curr);
 			require_once 'required/database.php';
 			$total = 0;
