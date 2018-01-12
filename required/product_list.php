@@ -1,5 +1,4 @@
 <?php
-
 	require_once 'database.php';
 
 	$req = $pdo->query('SELECT * FROM products');

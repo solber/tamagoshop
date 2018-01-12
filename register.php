@@ -13,7 +13,7 @@
 		if (empty($_POST['regusername']) || empty($_POST['regpsw']) || empty($_POST['regpswr']))
 		{
 			$_SESSION['flash']['danger'] = "Please fill all fields.";
-			header('Location: login.php');
+			header('Location: register.php');
 			exit();
 		}
 
@@ -21,7 +21,7 @@
 		if (!preg_match('/^[a-zA-Z0-9]+$/', $_POST['regusername']))
 		{ 
 			$_SESSION['flash']['danger'] = "Invalid username. Allowed char : a-z A-Z 0-9";
-			header('Location: login.php');
+			header('Location: register.php');
 			exit();
 		}
 
@@ -29,7 +29,7 @@
 		if ($_POST['regpsw'] != $_POST['regpswr'])
 		{
 			$_SESSION['flash']['danger'] = "Password must be the same.";
-			header('Location: login.php');
+			header('Location: register.php');
 			exit();
 		}
 
@@ -37,7 +37,7 @@
 		if (strlen($_POST['regpsw']) < 6 || strlen($_POST['regpsw']) > 10)
 		{
 			$_SESSION['flash']['danger'] = "Invalid password size. Minimum 6 Maximum 10.";
-			header('Location: login.php');
+			header('Location: register.php');
 			exit();
 		}
 
@@ -49,7 +49,7 @@
         if($user)
         {
         	$_SESSION['flash']['danger'] = "Username already taken.";
-			header('Location: login.php');
+			header('Location: register.php');
 			exit();
         }
 
@@ -79,7 +79,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="css/register.css">
-	<title>Login</title>
+	<title>Register</title>
 </head>
 <body>
 	<div class="content">

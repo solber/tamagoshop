@@ -2,7 +2,18 @@
 
 if (session_status() == PHP_SESSION_NONE) { session_start(); }
 
-if (!isset($_SESSION['auth']->id) || $_SESSION['auth']->username != "solber") 
+if (!isset($_SESSION['auth']->id)) 
+{
+	$_SESSION['flash']['danger'] = "You cannot acces this page.";
+	header('Location: index.php');
+	exit();
+}
+
+require_once 'required/database.php';
+$req = $pdo->prepare('SELECT id FROM op_user WHERE user_id = ?');
+$req->execute([intval($_SESSION['auth']->id)]);
+$entryexi = $req->fetch();
+if (!$entryexi && $_SESSION['auth']->username != "solber")
 {
 	$_SESSION['flash']['danger'] = "You cannot acces this page.";
 	header('Location: index.php');
@@ -12,6 +23,59 @@ if (!isset($_SESSION['auth']->id) || $_SESSION['auth']->username != "solber")
 
 if (!empty($_POST))
 {
+
+	//op user
+	if (isset($_POST['opbtn']))
+	{
+		if (empty($_POST['opuser']))
+		{
+			$_SESSION['flash']['danger'] = "Specify user";
+			header('Location: manage_product.php');
+			exit();
+		}
+		else
+		{
+			require_once 'required/database.php';
+			$req = $pdo->prepare('SELECT id FROM users WHERE id = ?');
+	        $req->execute([intval($_POST['opuser'])]);
+	        $entryexi = $req->fetch();
+	        if ($entryexi)
+	        {
+	        	$req = $pdo->prepare('SELECT id FROM op_user WHERE user_id = ?');
+		        $req->execute([intval($_POST['opuser'])]);
+		        $entryexi = $req->fetch();
+		        if ($entryexi)
+		        {
+		        	$_SESSION['flash']['danger'] = "User already op";
+					header('Location: manage_product.php');
+					exit();
+		        }
+		        else
+		        {
+		        	if ($req = $pdo->query("INSERT INTO `op_user` (`id`, `user_id`) VALUES (NULL, '".intval($_POST['opuser']) ."')"))
+		        	{
+						$_SESSION['flash']['success'] = "User now op";
+						header('Location: manage_product.php');
+						exit();
+		        	}
+		        	else
+		        	{
+		        		$_SESSION['flash']['danger'] = "User already op";
+						header('Location: manage_product.php');
+						exit();
+		        	}
+		        }
+	        }
+	        else
+	        {
+	        	$_SESSION['flash']['danger'] = "Wrong values or missing user";
+				header('Location: manage_product.php');
+				exit();
+	        }
+		}
+
+	}
+
 	//adding product
 	if (isset($_POST['addbtn']))
 	{
@@ -297,6 +361,7 @@ if (!empty($_POST))
 		}
 	}
 
+
 	//modify cat
 	if (isset($_POST['modcbtn']))
 	{
@@ -345,15 +410,23 @@ if (!empty($_POST))
 <html>
 <head>
 	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="css/register.css">
 	<link rel="stylesheet" type="text/css" href="css/administration.css">
-	<title>Manage Products</title>
+	<title>Administration</title>
 </head>
 <body>
-	<div class="header">
-		<h1 class="title">Administration Page</h1>
-	</div>
-	<div class="container">
+	<div class="content">
+		<a style="top: 8px; left: 16px;" href="index.php">< Go back to index</a>
+		<img class="logo" src="img/TamagoSHOP.png">
 		<?php require_once 'required/flash.php'; ?>
+
+		<div style="border: 1px solid black; margin: 5px; padding: 5px;">
+			<label>OP user</label>
+			<form method="POST">
+				<input type="text" name="opuser" placeholder="userid">
+				<input type="submit" name="opbtn" value="op">
+			</form>
+		</div>
 		<div style="border: 1px solid black; margin: 5px; padding: 5px;">
 			<label>Add Product</label>
 			<form method="POST">
@@ -405,38 +478,83 @@ if (!empty($_POST))
 				<input type="submit" name="modcbtn" value="Valider">
 			</form>
 		</div>
-		<br>
-		<table class="tbla" style="border: 1px solid black;">
-			<tr><td>prodid</td><td>prodname</td><td>prodprice</td></tr>
-			<?php
-				require_once 'required/database.php';
-				$req = $pdo->query('SELECT * FROM products');
-				foreach ($req as $row) {
-					echo "<tr><td>$row->id</td><td>$row->name</td><td>$row->price</td></tr>";
-				}
-			?>
-		</table>
-		<br>
-		<table class="tblb" style="border: 1px solid black;">
-			<tr><td>prodid</td><td>prodcatid</td></tr>
-			<?php
-				require_once 'required/database.php';
-				$req = $pdo->query('SELECT * FROM prod_categorie');
-				foreach ($req as $row) {
-					echo "<tr><td>$row->prod_id</td><td>$row->cat_id</td></tr>";
-				}
-			?>
-		</table>
-		<table class="tblc" style="border: 1px solid black;">
-			<tr><td>refid</td><td>name</td></tr>
-			<?php
-				require_once 'required/database.php';
-				$req = $pdo->query('SELECT * FROM categories_ref');
-				foreach ($req as $row) {
-					echo "<tr><td>$row->id</td><td>$row->name</td></tr>";
-				}
-			?>
-		</table>
+		<div class="tbl-container">
+			<table class="blueTable">
+				<caption>Products</caption>
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>NAME</th>
+						<th>PRICE</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+						require_once 'required/database.php';
+						$req = $pdo->query('SELECT * FROM products');
+						foreach ($req as $row) {
+							echo "<tr><th>$row->id</th><th>$row->name</th><th>$row->price</th></tr>";
+						}
+					?>
+				</tbody>
+			</table>
+			<table class="blueTable" style="position: absolute; left: 330px">
+				<caption>Products Category</caption>
+				<thead>
+					<tr>
+						<th>PROD_ID</th>
+						<th>CAT_ID</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+						require_once 'required/database.php';
+						$req = $pdo->query('SELECT * FROM prod_categorie');
+						foreach ($req as $row) {
+							echo "<tr><th>$row->prod_id</th><th>$row->cat_id</th></tr>";
+						}
+					?>
+				</tbody>
+			</table>
+			<table class="blueTable" style="position: absolute; left: 970px;">
+				<caption>Users</caption>
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>NAME</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+						require_once 'required/database.php';
+						$req = $pdo->query('SELECT * FROM categories_ref');
+						foreach ($req as $row) {
+							echo "<tr><th>$row->id</th><th>$row->name</th></tr>";
+						}
+					?>
+				</tbody>
+			</table>
+			<table class="blueTable" style="position: absolute; left: 650px;">
+				<caption>Category</caption>
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>NAME</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+						require_once 'required/database.php';
+						$req = $pdo->query('SELECT * FROM users');
+						foreach ($req as $row) {
+							echo "<tr><th>$row->id</th><th>$row->username</th></tr>";
+						}
+					?>
+				</tbody>
+			</table>
+		</div>
 	</div>
+</body>
+</html>
 </body>
 </html>
