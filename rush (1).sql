@@ -6,6 +6,11 @@
 -- Généré le :  ven. 12 jan. 2018 à 00:22
 -- Version du serveur :  5.7.19
 -- Version de PHP :  5.6.31
+CREATE DATABASE rush
+DEFAULT CHARACTER SET utf8
+DEFAULT COLLATE utf8_general_ci;
+
+USE rush;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
