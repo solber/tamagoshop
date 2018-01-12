@@ -39,22 +39,20 @@
 				$product_info = $req->fetch();
 				if ($product_info)
 				{
-					echo '<center><div class="cart-product">';
-						echo '<form method="POST">';
+						echo '<center><div class="cart-product">';
 							echo '<img src="' .$product_info->img .'" alt="img">';
 							echo '<h3>' .$product_info->name .'</h3>';
 							echo '<h2>' .$product_info->price .'<h2>';
-							echo '<input type="number" min="0" value="' .$value .'">';
-						if (isset($_SESSION['auth']->id))
-							echo '<input type="submit" name="buybtn" value="Buy">';
-						echo '</form>';
-					echo '</div></center>'; 
+							echo '<h2 style="right: -100px">QTY : ' .$value .'</h2>';
+						echo '</div></center>'; 
 					$total += ($product_info->price * $value);
 				}		
 			}
 			//echo $total;
+			echo '<form method="POST">';
+				if (isset($_SESSION['auth']->id))
+					echo '<center><input type="submit" name="buybtn" value="Buy" style="width: 200px; height: 30px;"></center>';
+			echo '</form>';
 			echo '<center><h1 style="color: orange;">Total : $' .$total .'</h1></center>';
 		}
-		
-
 ?>

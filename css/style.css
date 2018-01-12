@@ -128,13 +128,6 @@ ul.products li {
     position: absolute;
     width: 40px;
     bottom: 0px;
-    right: -165px;
+    right: -200px;
 }
 
-.cart-product input[type="submit"]
-{
-    position: absolute;
-    width: 60px;
-    bottom: 0px;
-    right: -230px;
-}

@@ -13,7 +13,7 @@
 				while (isset($_SESSION['cart'][$place]))
 					$place++;
 				$item = intval($_GET['id']);
-				$_SESSION['cart'][$place] = intval($_GET['id']);
+				$_SESSION['cart'][$place] = $item;
 				$_SESSION['flash']['info'] = "Item added to cart.";
 				header('Location: index.php');
 				exit();
