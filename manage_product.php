@@ -420,14 +420,14 @@ if (!empty($_POST))
 		<img class="logo" src="img/TamagoSHOP.png">
 		<?php require_once 'required/flash.php'; ?>
 
-		<div style="border: 1px solid black; margin: 5px; padding: 5px;">
+		<div style="border: 1px solid black; margin: 5px; padding: 5px; background: rgba(0, 0, 0, 0.1);">
 			<label>OP user</label>
 			<form method="POST">
 				<input type="text" name="opuser" placeholder="userid">
 				<input type="submit" name="opbtn" value="op">
 			</form>
 		</div>
-		<div style="border: 1px solid black; margin: 5px; padding: 5px;">
+		<div style="border: 1px solid black; margin: 5px; padding: 5px; background: rgba(0, 0, 0, 0.1);">
 			<label>Add Product</label>
 			<form method="POST">
 				<input type="text" name="name" placeholder="name">
@@ -460,7 +460,7 @@ if (!empty($_POST))
 				<input type="submit" name="dellbtn" value="Valider">
 			</form>
 		</div>
-		<div style="border: 1px solid black; margin: 5px; padding: 5px;">
+		<div style="border: 1px solid black; margin: 5px; padding: 5px; background: rgba(0, 0, 0, 0.1);">
 			<label>Add cat</label>
 			<form method="POST">
 				<input type="text" name="addcname" placeholder="name">
@@ -516,8 +516,8 @@ if (!empty($_POST))
 					?>
 				</tbody>
 			</table>
-			<table class="blueTable" style="position: absolute; left: 970px;">
-				<caption>Users</caption>
+			<table class="blueTable" style="position: absolute; left: 650px;">
+				<caption>Category</caption>
 				<thead>
 					<tr>
 						<th>ID</th>
@@ -534,8 +534,8 @@ if (!empty($_POST))
 					?>
 				</tbody>
 			</table>
-			<table class="blueTable" style="position: absolute; left: 650px;">
-				<caption>Category</caption>
+			<table class="blueTable" style="position: absolute; left: 970px;">
+				<caption>Users</caption>
 				<thead>
 					<tr>
 						<th>ID</th>

@@ -38,5 +38,6 @@ if (isset($_SESSION['auth']->id))
               echo '<li><a href="register.php">Signup</a></li>';
             }
       ?>
+      <li><a class="active" href="cart.php">Cart</a></li>
     </ul>
   </div>
