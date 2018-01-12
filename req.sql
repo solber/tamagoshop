@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  ven. 12 jan. 2018 à 21:36
+-- Généré le :  ven. 12 jan. 2018 à 22:10
 -- Version du serveur :  5.7.19-log
 -- Version de PHP :  5.6.31
 USE rush;
@@ -72,8 +72,17 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `cmd_id` varchar(255) NOT NULL,
   `product` int(11) NOT NULL,
   `qty` int(11) NOT NULL,
+  `total_cmd` float NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `orders`
+--
+
+INSERT INTO `orders` (`id`, `buyer_id`, `cmd_id`, `product`, `qty`, `total_cmd`) VALUES
+(26, 9, 'qzIHeo9j6A9OlQzPcPqHiKNUG4F3XtS6EDZ77L5Yd38L6oW2e5UPKhcZqhOI', 18, 2, 13),
+(27, 9, 'qzIHeo9j6A9OlQzPcPqHiKNUG4F3XtS6EDZ77L5Yd38L6oW2e5UPKhcZqhOI', 19, 1, 13);
 
 -- --------------------------------------------------------
 

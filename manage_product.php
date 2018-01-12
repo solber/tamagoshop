@@ -552,6 +552,29 @@ if (!empty($_POST))
 					?>
 				</tbody>
 			</table>
+			<table class="blueTable" style="position: absolute; left: 1290px;">
+				<caption>Orders</caption>
+				<thead>
+					<tr>
+						<th>CMD_ID</th>
+						<th>BUYER_ID</th>
+						<th>PRODUCT</th>
+						<th>QTY</th>
+						<th>TOTAL</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+						require_once 'required/database.php';
+						$req = $pdo->query('SELECT * FROM orders');
+						foreach ($req as $row) {
+							$order_id = substr($row->cmd_id, 0, 5);
+							echo "<tr><th>$order_id ...</th><th>$row->buyer_id</th><th>$row->product</th><th>$row->qty</th><th>$row->total_cmd</th></tr>";
+						}
+
+					?>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </body>

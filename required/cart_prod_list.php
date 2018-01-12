@@ -15,9 +15,11 @@
 			{
 				require_once 'required/database.php';
 				require_once 'required/functions.php';
+				
 				$order_id = str_random(60);
+
 				foreach ($_SESSION['bought'] as $key => $value) {
-					if (!($req = $pdo->query("INSERT INTO orders (id, buyer_id, cmd_id, product, qty) VALUES (NULL, '" .intval($_SESSION['auth']->id) ."', '" .$order_id ."', '" .intval($key) ."', '" .intval($value) ."')")))
+					if (!($req = $pdo->query("INSERT INTO orders (id, buyer_id, cmd_id, product, qty, total_cmd) VALUES (NULL, '" .intval($_SESSION['auth']->id) ."', '" .$order_id ."', '" .intval($key) ."', '" .intval($value) ."', '" .floatval($_POST['total']) ."')")))
 					{
 						$_SESSION['flash']['danger'] = "Error while processing to order.";
 						header('Location: cart.php');
@@ -72,7 +74,10 @@
 			//echo $total;
 			echo '<form method="POST">';
 				if (isset($_SESSION['auth']->id))
-					echo '<center><input type="submit" name="buybtn" value="Buy" style="width: 200px; height: 30px;"></center>';
+				{
+					echo '<input name="total" type="text" style="visibility: hidden" value="' .floatval($total) .'">';
+					echo '<center><input type="submit" name="buybtn" value="Buy" style="width: 200px; height: 30px;"></center>';	
+				}
 			echo '</form>';
 			echo '<center><h1 style="color: orange;">Total : $' .$total .'</h1></center>';
 		}
