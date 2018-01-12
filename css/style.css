@@ -88,3 +88,53 @@ ul.products li {
 .price {
 	color: orange;
 }
+
+.cart-product {
+    position: relative;
+    background-color: transparent;
+    border: 1px solid black;
+    margin-bottom: 5px;
+    width: 500px;
+    height: 150px;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f6f6f6+47,ededed+100;White+3D+%231 */
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+}
+
+.cart-product img {
+    position: absolute;
+    left: 10px;
+    top: 0;
+    width: 30%;
+}
+
+.cart-product h3 {
+    position: absolute;
+    left: 250px;
+}
+
+.cart-product h2 {
+    position: absolute;
+    left: 250px;
+    bottom: 0px;
+    color: orange;
+}
+
+.cart-product input[type="number"]
+{
+    position: absolute;
+    width: 40px;
+    bottom: 0px;
+    right: -165px;
+}
+
+.cart-product input[type="submit"]
+{
+    position: absolute;
+    width: 60px;
+    bottom: 0px;
+    right: -230px;
+}

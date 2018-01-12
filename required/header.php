@@ -9,6 +9,17 @@ if (isset($_SESSION['auth']->id))
   $req->execute([intval($_SESSION['auth']->id)]);
   $entryexi = $req->fetch();
 }
+
+$nb = 0;
+if (isset($_SESSION['cart']))
+{
+  foreach ($_SESSION['cart'] as $key) {
+    $nb++;
+  }
+}
+if ($nb >= 99)
+  $nb = '99+';
+
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +49,6 @@ if (isset($_SESSION['auth']->id))
               echo '<li><a href="register.php">Signup</a></li>';
             }
       ?>
-      <li><a class="active" href="cart.php">Cart</a></li>
+      <li><a class="active" href="cart.php"><?php echo 'Cart (' .$nb .')'; ?></a></li>
     </ul>
   </div>

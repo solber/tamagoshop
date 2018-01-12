@@ -10,7 +10,7 @@ if (isset($_GET))
 			$reqprod = $pdo->query("SELECT * FROM products WHERE id='" .$key->prod_id ."'");
 			foreach ($reqprod as $key) {
 				echo '<li>
-					<a href="#">
+					<a href="add_to_cart.php?id=' .intval($key->id) .'">
 						<img class="product-img" src="' .$key->img .'">
 						<center><h4 class="title">' .$key->name .'</h4><center>
 					</a>
