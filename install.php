@@ -85,6 +85,8 @@ try
 	if (session_status() == PHP_SESSION_NONE) { session_start(); }
 	if (isset($_SESSION['auth']))
 		unset($_SESSION['auth']);
+	if (isset($_SESSION['cart']))
+		unset($_SESSION['cart']);
 	$_SESSION['flash']['success'] = "Database set.";
 	header('Location: index.php');
 	exit();
