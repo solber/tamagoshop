@@ -85,6 +85,8 @@ try
 	//$file = file_get_contents('req.sql');
 	//$req = mysqli_query($mysqli, $file);
 	if (session_status() == PHP_SESSION_NONE) { session_start(); }
+	if (isset($_SESSION['auth']))
+		unset($_SESSION['auth']);
 	$_SESSION['flash']['success'] = "Database set.";
 	header('Location: index.php');
 	exit();
