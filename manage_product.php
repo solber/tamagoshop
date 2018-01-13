@@ -28,7 +28,7 @@ if (!empty($_POST))
 	{
 		if (empty($_POST['opuser']))
 		{
-			$_SESSION['flash']['danger'] = "Specify user";
+			$_SESSION['flash']['danger'] = "Error : Specify user";
 			header('Location: manage_product.php');
 			exit();
 		}
