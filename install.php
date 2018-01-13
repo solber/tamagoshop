@@ -15,6 +15,7 @@ try
 	$req = mysqli_query($mysqli, "DROP DATABASE IF EXISTS 'rush';");
 	$req = mysqli_query($mysqli, "CREATE DATABASE rush DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
 	$req = mysqli_query($mysqli, 'use rush;');
+	$req = mysqli_query($mysqli, "DROP TABLE IF EXISTS `categories_ref`;");
 	$req = mysqli_query($mysqli, "CREATE TABLE IF NOT EXISTS `categories_ref` (
 								  `id` int(11) NOT NULL AUTO_INCREMENT,
 								  `name` varchar(255) NOT NULL,
@@ -32,7 +33,7 @@ try
 							  `user_id` int(11) NOT NULL,
 							  PRIMARY KEY (`id`)
 							) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
-	$req = mysqli_query($mysqli, "ROP TABLE IF EXISTS `orders`;");
+	$req = mysqli_query($mysqli, "DROP TABLE IF EXISTS `orders`;");
 	$req = mysqli_query($mysqli, "CREATE TABLE IF NOT EXISTS `orders` (
 							  `id` int(11) NOT NULL AUTO_INCREMENT,
 							  `buyer_id` int(11) NOT NULL,
@@ -42,9 +43,6 @@ try
 							  `total_cmd` float NOT NULL,
 							  PRIMARY KEY (`id`)
 							) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;");
-	$req = mysqli_query($mysqli, "INSERT INTO `orders` (`id`, `buyer_id`, `cmd_id`, `product`, `qty`, `total_cmd`) VALUES
-								(26, 9, 'qzIHeo9j6A9OlQzPcPqHiKNUG4F3XtS6EDZ77L5Yd38L6oW2e5UPKhcZqhOI', 18, 2, 13),
-								(27, 9, 'qzIHeo9j6A9OlQzPcPqHiKNUG4F3XtS6EDZ77L5Yd38L6oW2e5UPKhcZqhOI', 19, 1, 13);");
 	$req = mysqli_query($mysqli, "DROP TABLE IF EXISTS `products`;");
 	$req = mysqli_query($mysqli, "CREATE TABLE IF NOT EXISTS `products` (
 								  `id` int(11) NOT NULL AUTO_INCREMENT,
