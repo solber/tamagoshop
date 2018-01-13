@@ -26,7 +26,7 @@
 						exit();
 					}
 				}
-				$_SESSION['flash']['success'] = "Order success.";
+				$_SESSION['flash']['success'] = "Order success !";
 				unset($_SESSION['cart']);
 				unset($_SESSION['bought']);
 				?><script>window.location.replace("cart.php");</script><?php

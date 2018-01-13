@@ -3,7 +3,7 @@
 if (session_status() == PHP_SESSION_NONE) { session_start(); }
 if (isset($_SESSION['auth']['id'])) 
 {
-	$_SESSION['flash']['danger'] = "You cannot acces this page.";
+	$_SESSION['flash']['danger'] = "You cannot access this page.";
 	header('Location: index.php');
 	exit();
 }
@@ -43,7 +43,7 @@ if (!empty($_POST))
 
 	        if(password_verify($ppsw, $user['password'])){
 	            $_SESSION['auth'] = $user;
-	            $_SESSION['flash']['success'] = "Connexion réussie !";
+	            $_SESSION['flash']['success'] = "You're connected !";
 	            header('Location: index.php');
 	            exit();
 	        }else{
@@ -54,7 +54,7 @@ if (!empty($_POST))
     	}
     	else
     	{
-    		$_SESSION['flash']['danger'] = "username doesent exist";
+    		$_SESSION['flash']['danger'] = "username does not exist";
 	        header('Location: login.php');
 	        exit();
     	}

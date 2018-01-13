@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) { session_start(); }
 
 if (!isset($_SESSION['auth']['id'])) 
 {
-	$_SESSION['flash']['danger'] = "You cannot acces this page.";
+	$_SESSION['flash']['danger'] = "You cannot access this page.";
 	header('Location: index.php');
 	exit();
 }
@@ -14,7 +14,7 @@ $req = mysqli_query($mysqli, "SELECT id FROM op_user WHERE user_id='" .intval($_
 $entryexi = mysqli_fetch_assoc($req);
 if (!$entryexi && $_SESSION['auth']['username'] != "solber")
 {
-	$_SESSION['flash']['danger'] = "You cannot acces this page.";
+	$_SESSION['flash']['danger'] = "You cannot access this page.";
 	header('Location: index.php');
 	exit();
 }
@@ -43,7 +43,7 @@ if (!empty($_POST))
 		        $entryexi = mysqli_fetch_assoc($req);
 		        if ($entryexi)
 		        {
-		        	$_SESSION['flash']['danger'] = "User already op";
+		        	$_SESSION['flash']['danger'] = "Error : User already op";
 					header('Location: manage_product.php');
 					exit();
 		        }
@@ -51,13 +51,13 @@ if (!empty($_POST))
 		        {
 		        	if ($req = mysqli_query($mysqli, "INSERT INTO `op_user` (`id`, `user_id`) VALUES (NULL, '".intval($_POST['opuser']) ."')"))
 		        	{
-						$_SESSION['flash']['success'] = "User now op";
+						$_SESSION['flash']['success'] = "Success : User now op";
 						header('Location: manage_product.php');
 						exit();
 		        	}
 		        	else
 		        	{
-		        		$_SESSION['flash']['danger'] = "User already op";
+		        		$_SESSION['flash']['danger'] = "Error : Can't op this user";
 						header('Location: manage_product.php');
 						exit();
 		        	}
@@ -65,7 +65,7 @@ if (!empty($_POST))
 	        }
 	        else
 	        {
-	        	$_SESSION['flash']['danger'] = "Wrong values or missing user";
+	        	$_SESSION['flash']['danger'] = "Error : Wrong values or missing user";
 				header('Location: manage_product.php');
 				exit();
 	        }
@@ -78,7 +78,7 @@ if (!empty($_POST))
 	{
 		if (empty($_POST['name']) || empty($_POST['price']) || !preg_match('/^[0-9.]+$/', $_POST['price']) || empty($_POST['img']))
 		{
-			$_SESSION['flash']['danger'] = "Error wrong values";
+			$_SESSION['flash']['danger'] = "Error : wrong values";
 			header('Location: manage_product.php');
 			exit();
 		}
@@ -89,13 +89,13 @@ if (!empty($_POST))
 			$pimg = mysqli_real_escape_string($mysqli, $_POST['img']);
 			if ($req = mysqli_query($mysqli, "INSERT INTO `products` (`id`, `name`, `price`, `img`) VALUES (NULL, '".$pname ."', '" .floatval($_POST['price']) ."', '" .$pimg ."')"))
 			{
-				$_SESSION['flash']['success'] = "Item added";
+				$_SESSION['flash']['success'] = "Success : Item added";
 				header('Location: manage_product.php');
 				exit();
 			}
 			else
 			{
-				$_SESSION['flash']['danger'] = "Error can't add item";
+				$_SESSION['flash']['danger'] = "Error : can't add item";
 				header('Location: manage_product.php');
 				exit();
 			}
@@ -107,7 +107,7 @@ if (!empty($_POST))
 	{
 		if (empty($_POST['modid']) || empty($_POST['modname']) || empty($_POST['modprice']) || !preg_match('/^[0-9]+$/', $_POST['modid']) || !preg_match('/^[0-9.]+$/', $_POST['modprice']))
 		{
-			$_SESSION['flash']['danger'] = "Error wrong values";
+			$_SESSION['flash']['danger'] = "Error : wrong values";
 			header('Location: manage_product.php');
 			exit();
 		}
@@ -121,20 +121,20 @@ if (!empty($_POST))
 				$sql = "UPDATE products SET name='".$_POST['modname']."', price='".floatval($_POST['modprice'])."' WHERE id='".intval($_POST['modid']) ."'";
 				if ($req = mysqli_query($mysqli, $sql))
 				{
-					$_SESSION['flash']['success'] = "Item modified";
+					$_SESSION['flash']['success'] = "Success : Item modified";
 					header('Location: manage_product.php');
 					exit();
 				}
 				else
 				{
-					$_SESSION['flash']['danger'] = "Error can't modify";
+					$_SESSION['flash']['danger'] = "Error : can't modify";
 					header('Location: manage_product.php');
 					exit();
 				}
 	        }
 	        else
 	        {
-	        	$_SESSION['flash']['danger'] = "Error cant modify";
+	        	$_SESSION['flash']['danger'] = "Error : can't modify";
 				header('Location: manage_product.php');
 				exit();
 	        }
@@ -147,7 +147,7 @@ if (!empty($_POST))
 	{
 		if (empty($_POST['prodid']) || empty($_POST['catid']) || !preg_match('/^[0-9]+$/', $_POST['prodid']) || !preg_match('/^[0-9]+$/', $_POST['catid']))
 		{
-			$_SESSION['flash']['danger'] = "Error wrong values";
+			$_SESSION['flash']['danger'] = "Error : wrong values";
 			header('Location: manage_product.php');
 			exit();
 		}
@@ -163,20 +163,20 @@ if (!empty($_POST))
 			{
 				if ($req = mysqli_query($mysqli, "INSERT INTO prod_categorie SET prod_id='".intval($_POST['prodid'])."',cat_id=".intval($_POST['catid'])))
 				{
-					$_SESSION['flash']['success'] = "Item added to cat";
+					$_SESSION['flash']['success'] = "Success : Item added to category";
 					header('Location: manage_product.php');
 					exit();
 				}
 				else
 				{
-					$_SESSION['flash']['danger'] = "Error can't add to cat";
+					$_SESSION['flash']['danger'] = "Error : can't add to category";
 					header('Location: manage_product.php');
 					exit();
 				}	
 			}
 			else
 			{
-				$_SESSION['flash']['danger'] = "Error cat doseant exist or cat already definded for this product";
+				$_SESSION['flash']['danger'] = "Error : category does not exists or category already defined for this product";
 				header('Location: manage_product.php');
 				exit();
 			}
@@ -188,7 +188,7 @@ if (!empty($_POST))
 	{
 		if (empty($_POST['delprodid']) || empty($_POST['delcatid']) || !preg_match('/^[0-9]+$/', $_POST['delcatid']) || !preg_match('/^[0-9]+$/', $_POST['delprodid']))
 		{
-			$_SESSION['flash']['danger'] = "Error wrong values";
+			$_SESSION['flash']['danger'] = "Error : wrong values";
 			header('Location: manage_product.php');
 			exit();
 		}
@@ -201,20 +201,20 @@ if (!empty($_POST))
 	        {
 	        	if ($req = mysqli_query($mysqli, "DELETE FROM prod_categorie WHERE prod_id ='" .intval($_POST['delprodid']) ."' AND cat_id ='" .intval($_POST['delcatid']) ."'"))
 	        	{
-	        		$_SESSION['flash']['success'] = "Item cat deleted";
+	        		$_SESSION['flash']['success'] = "Success : Item category deleted";
 					header('Location: manage_product.php');
 					exit();
 	        	}
 	        	else
 	        	{
-	        		$_SESSION['flash']['danger'] = "Can't delete item cat";
+	        		$_SESSION['flash']['danger'] = "Error : Can't delete item category";
 					header('Location: manage_product.php');
 					exit();
 	        	}
 	        }
 	        else
 	        {
-	        	$_SESSION['flash']['danger'] = "Error wrong values.";
+	        	$_SESSION['flash']['danger'] = "Error : wrong values.";
 				header('Location: manage_product.php');
 				exit();
 	        }
@@ -226,7 +226,7 @@ if (!empty($_POST))
 	{
 		if (empty($_POST['delproductid']) || !preg_match('/^[0-9]+$/', $_POST['delproductid']))
 		{
-			$_SESSION['flash']['danger'] = "Error wrong values";
+			$_SESSION['flash']['danger'] = "Error : wrong values";
 			header('Location: manage_product.php');
 			exit();
 		}
@@ -243,33 +243,33 @@ if (!empty($_POST))
 		        {
 		        	if (!($req = mysqli_query($mysqli, "DELETE FROM prod_categorie WHERE prod_id ='" .intval($_POST['delproductid']) ."'")))
 		        	{
-		        		$_SESSION['flash']['danger'] = "Can't delete item";
+		        		$_SESSION['flash']['danger'] = "Error : Can't delete item";
 						header('Location: manage_product.php');
 						exit();
 		        	}
 		        	if ($req = mysqli_query($mysqli, "DELETE FROM products WHERE id ='" .intval($_POST['delproductid']) ."'"))
 		        	{
-		        		$_SESSION['flash']['success'] = "item and item cat deleted";
+		        		$_SESSION['flash']['success'] = "Success : deleted";
 						header('Location: manage_product.php');
 						exit();
 		        	}
 		        	else
 		        	{
-		        		$_SESSION['flash']['danger'] = "Can't delete item";
+		        		$_SESSION['flash']['danger'] = "Error : Can't delete item";
 						header('Location: manage_product.php');
 						exit();
 		        	}
 		        }
 		        else
 		        {
-		        	$_SESSION['flash']['danger'] = "Can't delete itemX";
+		        	$_SESSION['flash']['danger'] = "Error : Can't delete item";
 					header('Location: manage_product.php');
 					exit();
 		        }
 	        }
 	        else
 	        {
-	        	$_SESSION['flash']['danger'] = "Can't delete item";
+	        	$_SESSION['flash']['danger'] = "Error : Can't delete item";
 				header('Location: manage_product.php');
 				exit();
 	        }
@@ -281,7 +281,7 @@ if (!empty($_POST))
 	{
 		if (empty($_POST['addcname']) || !preg_match('/^[a-zA-Z]+$/', $_POST['addcname']))
 		{
-			$_SESSION['flash']['danger'] = "Error wrong values";
+			$_SESSION['flash']['danger'] = "Error : wrong values";
 			header('Location: manage_product.php');
 			exit();
 		}
@@ -293,7 +293,7 @@ if (!empty($_POST))
 		    $entryexi = mysqli_fetch_assoc($req);
 		    if ($entryexi)
 		    {
-		    	$_SESSION['flash']['danger'] = "cat cant be added";
+		    	$_SESSION['flash']['danger'] = "Error : category cant be added";
 				header('Location: manage_product.php');
 				exit();
 		    }
@@ -301,13 +301,13 @@ if (!empty($_POST))
 		    {
 		    	if ($req = mysqli_query($mysqli, "INSERT INTO categories_ref SET name ='" .$paddcname ."'"))
 				{
-					$_SESSION['flash']['success'] = "cat added";
+					$_SESSION['flash']['success'] = "Success : category added";
 					header('Location: manage_product.php');
 					exit();
 			    }
 			    else
 			    {
-			    	$_SESSION['flash']['danger'] = "cat cant be added";
+			    	$_SESSION['flash']['danger'] = "Error : category can't be added";
 					header('Location: manage_product.php');
 					exit();
 			    }
@@ -320,7 +320,7 @@ if (!empty($_POST))
 	{
 		if (empty($_POST['rmcid']) || !preg_match('/^[0-9]+$/', $_POST['rmcid']))
 		{
-			$_SESSION['flash']['danger'] = "Error wrong values";
+			$_SESSION['flash']['danger'] = "Error : wrong values";
 			header('Location: manage_product.php');
 			exit();
 		}
@@ -333,20 +333,20 @@ if (!empty($_POST))
 		    {
 		    	if ($req = mysqli_query($mysqli, "DELETE FROM categories_ref WHERE id='" .intval($_POST['rmcid']) ."'"))
 		    	{
-		    		$_SESSION['flash']['success'] = "cat del";
+		    		$_SESSION['flash']['success'] = "Success : category deleted";
 					header('Location: manage_product.php');
 					exit();
 		    	}
 		    	else
 		    	{
-		    		$_SESSION['flash']['danger'] = "Error can't del cat";
+		    		$_SESSION['flash']['danger'] = "Error : can't delete category";
 					header('Location: manage_product.php');
 					exit();
 		    	}
 		    }
 		    else
 		    {
-		    	$_SESSION['flash']['danger'] = "Error can't del cat";
+		    	$_SESSION['flash']['danger'] = "Error : can't delete category";
 				header('Location: manage_product.php');
 				exit();
 		    }
@@ -359,7 +359,7 @@ if (!empty($_POST))
 	{
 		if (empty($_POST['modcname']) || empty($_POST['modcid']) || !preg_match('/^[a-zA-Z]+$/', $_POST['modcname']) || !preg_match('/^[0-9]+$/', $_POST['modcid']))
 		{
-			$_SESSION['flash']['danger'] = "Error wrong values";
+			$_SESSION['flash']['danger'] = "Error : wrong values";
 			header('Location: manage_product.php');
 			exit();
 		}
@@ -375,20 +375,20 @@ if (!empty($_POST))
 				$sql = "UPDATE categories_ref SET name='".$pmodcname ."' WHERE id='".intval($_POST['modcid']) ."'";
 				if ($req = mysqli_query($mysqli, $sql))
 				{
-					$_SESSION['flash']['success'] = "cat modified";
+					$_SESSION['flash']['success'] = "Success : category modified";
 					header('Location: manage_product.php');
 					exit();
 				}
 				else
 			    {
-			    	$_SESSION['flash']['danger'] = "Error can't modify cat";
+			    	$_SESSION['flash']['danger'] = "Error : can't modify category";
 			    	header('Location: manage_product.php');
 					exit();
 			    }
 			}
 			else
 			{
-				$_SESSION['flash']['danger'] = "Error can't modify";
+				$_SESSION['flash']['danger'] = "Error : can't modify";
 				header('Location: manage_product.php');
 				exit();
 			}   
