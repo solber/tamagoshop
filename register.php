@@ -43,9 +43,9 @@
 
 		//Verify user exists
 		require_once 'required/database.php';
-        $req = $pdo->prepare('SELECT id FROM users WHERE username = ?');
-        $req->execute([$_POST['regusername']]);
-        $user = $req->fetch();
+        $pusername = mysqli_real_escape_string($mysqli, $_POST['regusername']);
+        $req = mysqli_query($mysqli, "SELECT id FROM users WHERE username='" .$pusername ."'");
+        $user = mysqli_fetch_assoc($req);
         if($user)
         {
         	$_SESSION['flash']['danger'] = "Username already taken.";
@@ -58,12 +58,10 @@
         require_once 'required/functions.php';
         try
         {
-	        $req = $pdo->prepare("INSERT INTO users SET username = ?, password = ?");
-            $password = password_hash($_POST['regpsw'], PASSWORD_BCRYPT);
-            $token = str_random(60);
-           	$req->execute([$_POST['regusername'], $password]);
+        	$password = mysqli_real_escape_string($mysqli, password_hash($_POST['regpsw'], PASSWORD_BCRYPT));
+	        $req = mysqli_query($mysqli, "INSERT INTO users SET username ='" .$pusername ."', password ='" .$password ."'");
 
-           	$user_id = $pdo->lastinsertid();
+           	$user_id = mysqli_insert_id($mysqli);
            	$_SESSION['flash']['success'] = "SUCCESS - Account created, please connect !";
            	header('Location: login.php');
             exit();
@@ -95,7 +93,7 @@
 			<br>
 			<center><input type="password" name="regpswr" placeholder="Password Repeat"/></center>
 			<br>
-			<center><button class="btn" name="login" value="login">LOGIN</button></center>
+			<center><button class="btn" name="login" value="login">REGISTER</button></center>
 		</form>
 	</div>
 

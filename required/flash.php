@@ -1,6 +1,3 @@
-<head>
-	<link rel="stylesheet" type="text/css" href="./css/flash.css">
-</head>
 <?php 
 if(session_status() == PHP_SESSION_NONE){ session_start(); }
 
@@ -13,3 +10,6 @@ if(isset($_SESSION['flash'])): ?>
     <?php endforeach; ?>
     <?php unset($_SESSION['flash']); ?>
 <?php endif; ?>
+<head>
+	<link rel="stylesheet" type="text/css" href="./css/flash.css">
+</head>

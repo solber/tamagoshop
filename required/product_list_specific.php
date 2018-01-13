@@ -4,18 +4,23 @@ if (isset($_GET))
 	if (isset($_GET['cat']))
 	{
 		require_once 'database.php';
-
-		$req = $pdo->query("SELECT * FROM prod_categorie WHERE cat_id='" .intval($_GET['cat']) ."'");
-		foreach ($req as $key) {
-			$reqprod = $pdo->query("SELECT * FROM products WHERE id='" .$key->prod_id ."'");
-			foreach ($reqprod as $key) {
-				echo '<li>
-					<a href="add_to_cart.php?id=' .intval($key->id) .'">
-						<img class="product-img" src="' .$key->img .'">
-						<center><h4 class="title">' .$key->name .'</h4><center>
-					</a>
-					<center><p class="price">$'.$key->price .'</p><center>    
-				</li>';
+		if ($req = mysqli_query($mysqli, "SELECT * FROM prod_categorie WHERE cat_id='" .intval($_GET['cat']) ."'"))
+		{
+			while ($row = mysqli_fetch_assoc($req))
+			{
+				if ($reqprod = mysqli_query($mysqli, "SELECT * FROM products WHERE id='" .intval($row['prod_id']) ."'"))
+				{
+					while ($row = mysqli_fetch_assoc($reqprod))
+					{
+						echo '<li>
+								<a href="add_to_cart.php?id=' .intval($row['id']) .'">
+									<img class="product-img" src="' .$row['img'] .'">
+									<center><h4 class="title">' .$row['name'] .'</h4><center>
+								</a>
+								<center><p class="price">$'.$row['price'] .'</p><center>    
+							</li>';
+					}		
+				}
 			}
 		}
 	}

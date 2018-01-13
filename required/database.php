@@ -1,12 +1,12 @@
 <?php
-try
-{
-$pdo = new PDO('mysql:host=localhost;dbname=rush', 'root', 'toor');
+	$host = "localhost";
+	$user = "root";
+	$password = "test";
+	$db = "rush";
 
-//$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXEPTION);
-$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-}
-catch (Exception $e)
-{
-        die('Erreur : ' . $e->getMessage());
-}
+	$mysqli = mysqli_connect($host, $user, $password, $db);
+
+	if (mysqli_connect_errno($mysqli)) {
+	   echo "Failed to connect to MySQL: " . mysqli_connect_error();
+	}
+?>

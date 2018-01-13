@@ -1,7 +1,7 @@
 <?php
 
 if (session_status() == PHP_SESSION_NONE) { session_start(); }
-if (!isset($_SESSION['auth']->id)) 
+if (!isset($_SESSION['auth']['id'])) 
 {
 	$_SESSION['flash']['danger'] = "You cannot acces this page.";
 	header('Location: index.php');
@@ -14,7 +14,7 @@ if (!empty($_POST))
 	if ($_POST['deletebtn'] === "delete")
 	{
 		require_once 'required/database.php';
-		if ($req = $pdo->query('DELETE FROM users WHERE id=' .intval($_SESSION['auth']->id)))
+		if ($req = mysqli_query($mysqli, 'DELETE FROM users WHERE id=' .intval($_SESSION['auth']['id'])))
 		{
 			unset($_SESSION['auth']);
 			$_SESSION['flash']['success'] = "Account deleted.";

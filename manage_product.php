@@ -2,7 +2,7 @@
 
 if (session_status() == PHP_SESSION_NONE) { session_start(); }
 
-if (!isset($_SESSION['auth']->id)) 
+if (!isset($_SESSION['auth']['id'])) 
 {
 	$_SESSION['flash']['danger'] = "You cannot acces this page.";
 	header('Location: index.php');
@@ -10,10 +10,9 @@ if (!isset($_SESSION['auth']->id))
 }
 
 require_once 'required/database.php';
-$req = $pdo->prepare('SELECT id FROM op_user WHERE user_id = ?');
-$req->execute([intval($_SESSION['auth']->id)]);
-$entryexi = $req->fetch();
-if (!$entryexi && $_SESSION['auth']->username != "solber")
+$req = mysqli_query($mysqli, "SELECT id FROM op_user WHERE user_id='" .intval($_SESSION['auth']['id']) ."'");
+$entryexi = mysqli_fetch_assoc($req);
+if (!$entryexi && $_SESSION['auth']['username'] != "solber")
 {
 	$_SESSION['flash']['danger'] = "You cannot acces this page.";
 	header('Location: index.php');
@@ -36,14 +35,12 @@ if (!empty($_POST))
 		else
 		{
 			require_once 'required/database.php';
-			$req = $pdo->prepare('SELECT id FROM users WHERE id = ?');
-	        $req->execute([intval($_POST['opuser'])]);
-	        $entryexi = $req->fetch();
+			$req = mysqli_query($mysqli, "SELECT id FROM users WHERE id='" .intval($_POST['opuser']) ."'");
+	        $entryexi = mysqli_fetch_assoc($req);
 	        if ($entryexi)
 	        {
-	        	$req = $pdo->prepare('SELECT id FROM op_user WHERE user_id = ?');
-		        $req->execute([intval($_POST['opuser'])]);
-		        $entryexi = $req->fetch();
+	        	$req = mysqli_query($mysqli, "SELECT id FROM op_user WHERE user_id='" .intval($_POST['opuser']) ."'");
+		        $entryexi = mysqli_fetch_assoc($req);
 		        if ($entryexi)
 		        {
 		        	$_SESSION['flash']['danger'] = "User already op";
@@ -52,7 +49,7 @@ if (!empty($_POST))
 		        }
 		        else
 		        {
-		        	if ($req = $pdo->query("INSERT INTO `op_user` (`id`, `user_id`) VALUES (NULL, '".intval($_POST['opuser']) ."')"))
+		        	if ($req = mysqli_query($mysqli, "INSERT INTO `op_user` (`id`, `user_id`) VALUES (NULL, '".intval($_POST['opuser']) ."')"))
 		        	{
 						$_SESSION['flash']['success'] = "User now op";
 						header('Location: manage_product.php');
@@ -88,7 +85,9 @@ if (!empty($_POST))
 		else
 		{
 			require_once 'required/database.php';
-			if ($req = $pdo->query("INSERT INTO `products` (`id`, `name`, `price`, `img`) VALUES (NULL, '".$_POST['name'] ."', '" .floatval($_POST['price']) ."', '" .$_POST['img'] ."')"))
+			$pname = mysqli_real_escape_string($mysqli, $_POST['name']);
+			$pimg = mysqli_real_escape_string($mysqli, $_POST['img']);
+			if ($req = mysqli_query($mysqli, "INSERT INTO `products` (`id`, `name`, `price`, `img`) VALUES (NULL, '".$pname ."', '" .floatval($_POST['price']) ."', '" .$pimg ."')"))
 			{
 				$_SESSION['flash']['success'] = "Item added";
 				header('Location: manage_product.php');
@@ -115,13 +114,12 @@ if (!empty($_POST))
 		else
 		{
 			require_once 'required/database.php';
-			$req = $pdo->prepare('SELECT id FROM products WHERE id = ?');
-	        $req->execute([intval($_POST['modid'])]);
-	        $entryexi = $req->fetch();
+			$req = mysqli_query($mysqli, "SELECT id FROM products WHERE id='" .intval($_POST['modid']) ."'");
+	        $entryexi = mysqli_fetch_assoc($req);
 	        if ($entryexi)
 	        {
-				$sql = "UPDATE products SET name='".$_POST['modname']."', price='".floatval($_POST['modprice'])."' WHERE id='".$_POST['modid']."'";
-				if ($req = $pdo->query($sql))
+				$sql = "UPDATE products SET name='".$_POST['modname']."', price='".floatval($_POST['modprice'])."' WHERE id='".intval($_POST['modid']) ."'";
+				if ($req = mysqli_query($mysqli, $sql))
 				{
 					$_SESSION['flash']['success'] = "Item modified";
 					header('Location: manage_product.php');
@@ -156,16 +154,14 @@ if (!empty($_POST))
 		else
 		{
 			require_once 'required/database.php';
-			$req = $pdo->prepare('SELECT id FROM categories_ref WHERE id = ?');
-	        $req->execute([intval($_POST['catid'])]);
-	        $catexi = $req->fetch();
+			$req = mysqli_query($mysqli, "SELECT id FROM categories_ref WHERE id='" .intval($_POST['catid']) ."'");
+	        $catexi = mysqli_fetch_assoc($req);
 
-	        $req = $pdo->prepare('SELECT id FROM prod_categorie WHERE prod_id = ? AND cat_id = ?');
-	        $req->execute([intval($_POST['prodid']), intval($_POST['catid'])]);
-	        $entryexi = $req->fetch();
+	        $req = mysqli_query($mysqli, "SELECT id FROM prod_categorie WHERE prod_id='" .intval($_POST['prodid']) ."' AND cat_id='" .intval($_POST['catid']) ."'");
+	        $entryexi = mysqli_fetch_assoc($req);
 			if ($catexi && !$entryexi)
 			{
-				if ($req = $pdo->query("INSERT INTO prod_categorie SET prod_id='".intval($_POST['prodid'])."',cat_id=".intval($_POST['catid'])))
+				if ($req = mysqli_query($mysqli, "INSERT INTO prod_categorie SET prod_id='".intval($_POST['prodid'])."',cat_id=".intval($_POST['catid'])))
 				{
 					$_SESSION['flash']['success'] = "Item added to cat";
 					header('Location: manage_product.php');
@@ -199,12 +195,11 @@ if (!empty($_POST))
 		else
 		{
 			require_once 'required/database.php';
-			$req = $pdo->prepare('SELECT id FROM prod_categorie WHERE prod_id = ? AND cat_id = ?');
-	        $req->execute([intval($_POST['delprodid']), intval($_POST['delcatid'])]);
-	        $entryexi = $req->fetch();
+			$req = mysqli_query($mysqli, "SELECT id FROM prod_categorie WHERE prod_id ='".intval($_POST['delprodid']) ."' AND cat_id ='".intval($_POST['delcatid'])."'");
+	        $entryexi = mysqli_fetch_assoc($req);
 	        if ($entryexi)
 	        {
-	        	if ($req = $pdo->query("DELETE FROM prod_categorie WHERE prod_id ='" .intval($_POST['delprodid']) ."' AND cat_id ='" .intval($_POST['delcatid']) ."'"))
+	        	if ($req = mysqli_query($mysqli, "DELETE FROM prod_categorie WHERE prod_id ='" .intval($_POST['delprodid']) ."' AND cat_id ='" .intval($_POST['delcatid']) ."'"))
 	        	{
 	        		$_SESSION['flash']['success'] = "Item cat deleted";
 					header('Location: manage_product.php');
@@ -238,23 +233,21 @@ if (!empty($_POST))
 		else
 		{
 			require_once 'required/database.php';
-			$req = $pdo->prepare('SELECT id FROM products WHERE id = ?');
-	        $req->execute([intval($_POST['delproductid'])]);
-	        $entryexi = $req->fetch();
+			$req = mysqli_query($mysqli, "SELECT id FROM products WHERE id='".intval($_POST['delproductid'])."'");
+	        $entryexi = mysqli_fetch_assoc($req);
 	        if ($entryexi)
 	        {
-	        	$req = $pdo->prepare('SELECT id FROM prod_categorie WHERE prod_id = ?');
-		        $req->execute([intval($_POST['delproductid'])]);
-		        $entryexi = $req->fetch();
-		        if ($entryexi > 0)
+	        	$req = mysqli_query($mysqli, "SELECT id FROM products WHERE id='".intval($_POST['delproductid'])."'");
+		        $entryexi = mysqli_fetch_assoc($req);
+		        if ($entryexi)
 		        {
-		        	if (!($req = $pdo->query("DELETE FROM prod_categorie WHERE prod_id ='" .intval($_POST['delproductid']) ."'")))
+		        	if (!($req = mysqli_query($mysqli, "DELETE FROM prod_categorie WHERE prod_id ='" .intval($_POST['delproductid']) ."'")))
 		        	{
 		        		$_SESSION['flash']['danger'] = "Can't delete item";
 						header('Location: manage_product.php');
 						exit();
 		        	}
-		        	if ($req = $pdo->query("DELETE FROM products WHERE id ='" .intval($_POST['delproductid']) ."'"))
+		        	if ($req = mysqli_query($mysqli, "DELETE FROM products WHERE id ='" .intval($_POST['delproductid']) ."'"))
 		        	{
 		        		$_SESSION['flash']['success'] = "item and item cat deleted";
 						header('Location: manage_product.php');
@@ -269,7 +262,7 @@ if (!empty($_POST))
 		        }
 		        else
 		        {
-		        	$_SESSION['flash']['danger'] = "Can't delete item";
+		        	$_SESSION['flash']['danger'] = "Can't delete itemX";
 					header('Location: manage_product.php');
 					exit();
 		        }
@@ -295,10 +288,10 @@ if (!empty($_POST))
 		else
 		{
 			require_once 'required/database.php';
-			$req = $pdo->prepare('SELECT id FROM categories_ref WHERE name = ?');
-		    $req->execute([$_POST['addcname']]);
-		    $entryexi = $req->fetch();
-		    if ($entryexi > 0)
+			$paddcname = mysqli_real_escape_string($mysqli, $_POST['addcname']);
+			$req = mysqli_query($mysqli, "SELECT id FROM categories_ref WHERE name='".$paddcname."'");
+		    $entryexi = mysqli_fetch_assoc($req);
+		    if ($entryexi)
 		    {
 		    	$_SESSION['flash']['danger'] = "cat cant be added";
 				header('Location: manage_product.php');
@@ -306,7 +299,7 @@ if (!empty($_POST))
 		    }
 		    else
 		    {
-		    	if ($req = $pdo->query("INSERT INTO categories_ref SET name ='" .$_POST['addcname'] ."'"))
+		    	if ($req = mysqli_query($mysqli, "INSERT INTO categories_ref SET name ='" .$paddcname ."'"))
 				{
 					$_SESSION['flash']['success'] = "cat added";
 					header('Location: manage_product.php');
@@ -334,12 +327,11 @@ if (!empty($_POST))
 		else
 		{
 			require_once 'required/database.php';
-			$req = $pdo->prepare('SELECT id FROM categories_ref WHERE id = ?');
-		    $req->execute([intval($_POST['rmcid'])]);
-		    $entryexi = $req->fetch();
-		    if ($entryexi > 0)
+			$req = mysqli_query($mysqli, "SELECT id FROM categories_ref WHERE id='" .intval($_POST['rmcid']) ."'");
+		    $entryexi = mysqli_fetch_assoc($req);
+		    if ($entryexi)
 		    {
-		    	if ($req = $pdo->query("DELETE FROM categories_ref WHERE id='" .intval($_POST['rmcid']) ."'"))
+		    	if ($req = mysqli_query($mysqli, "DELETE FROM categories_ref WHERE id='" .intval($_POST['rmcid']) ."'"))
 		    	{
 		    		$_SESSION['flash']['success'] = "cat del";
 					header('Location: manage_product.php');
@@ -374,14 +366,14 @@ if (!empty($_POST))
 		else
 		{
 			require_once 'required/database.php';
-			$req = $pdo->prepare('SELECT id FROM categories_ref WHERE id = ?');
-		    $req->execute([intval($_POST['modcid'])]);
-		    $entryexi = $req->fetch();
+			$req = mysqli_query($mysqli, "SELECT id FROM categories_ref WHERE id='" .intval($_POST['modcid'])."'");
+		    $entryexi = mysqli_fetch_assoc($req);
 		    if ($entryexi)
 		    {
 		    	require_once 'required/database.php';
-				$sql = "UPDATE categories_ref SET name='".$_POST['modcname']."' WHERE id='".$_POST['modcid']."'";
-				if ($req = $pdo->query($sql))
+		    	$pmodcname = mysqli_real_escape_string($mysqli, $_POST['modcname']);
+				$sql = "UPDATE categories_ref SET name='".$pmodcname ."' WHERE id='".intval($_POST['modcid']) ."'";
+				if ($req = mysqli_query($mysqli, $sql))
 				{
 					$_SESSION['flash']['success'] = "cat modified";
 					header('Location: manage_product.php');
@@ -491,9 +483,9 @@ if (!empty($_POST))
 				<tbody>
 					<?php
 						require_once 'required/database.php';
-						$req = $pdo->query('SELECT * FROM products');
-						foreach ($req as $row) {
-							echo "<tr><th>$row->id</th><th>$row->name</th><th>$row->price</th></tr>";
+						$req = mysqli_query($mysqli, 'SELECT * FROM products');
+						while ($row = mysqli_fetch_assoc($req)) {
+							echo "<tr><th>" .$row['id'] ."</th><th>" .$row['name'] ."</th><th>" .$row['price'] ."</th></tr>";
 						}
 					?>
 				</tbody>
@@ -506,12 +498,12 @@ if (!empty($_POST))
 						<th>CAT_ID</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody> 
 					<?php
 						require_once 'required/database.php';
-						$req = $pdo->query('SELECT * FROM prod_categorie');
-						foreach ($req as $row) {
-							echo "<tr><th>$row->prod_id</th><th>$row->cat_id</th></tr>";
+						$req = mysqli_query($mysqli, 'SELECT * FROM prod_categorie');
+						while ($row = mysqli_fetch_assoc($req)) {
+							echo "<tr><th>" .$row['prod_id'] ."</th><th>" .$row['cat_id'] ."</th></tr>";
 						}
 					?>
 				</tbody>
@@ -527,9 +519,9 @@ if (!empty($_POST))
 				<tbody>
 					<?php
 						require_once 'required/database.php';
-						$req = $pdo->query('SELECT * FROM categories_ref');
-						foreach ($req as $row) {
-							echo "<tr><th>$row->id</th><th>$row->name</th></tr>";
+						$req = mysqli_query($mysqli, 'SELECT * FROM categories_ref');
+						while ($row = mysqli_fetch_assoc($req)) {
+							echo "<tr><th>" .$row['id'] ."</th><th>" .$row['name'] ."</th></tr>";
 						}
 					?>
 				</tbody>
@@ -545,9 +537,9 @@ if (!empty($_POST))
 				<tbody>
 					<?php
 						require_once 'required/database.php';
-						$req = $pdo->query('SELECT * FROM users');
-						foreach ($req as $row) {
-							echo "<tr><th>$row->id</th><th>$row->username</th></tr>";
+						$req = mysqli_query($mysqli, 'SELECT * FROM users');
+						while ($row = mysqli_fetch_assoc($req)) {
+							echo "<tr><th>" .$row['id'] ."</th><th>" .$row['username'] ."</th></tr>";
 						}
 					?>
 				</tbody>
@@ -566,10 +558,10 @@ if (!empty($_POST))
 				<tbody>
 					<?php
 						require_once 'required/database.php';
-						$req = $pdo->query('SELECT * FROM orders');
-						foreach ($req as $row) {
-							$order_id = substr($row->cmd_id, 0, 5);
-							echo "<tr><th>$order_id ...</th><th>$row->buyer_id</th><th>$row->product</th><th>$row->qty</th><th>$row->total_cmd</th></tr>";
+						$req = mysqli_query($mysqli, 'SELECT * FROM orders');
+						while ($row = mysqli_fetch_assoc($req)) {
+							$order_id = substr($row['cmd_id'], 0, 5);
+							echo "<tr><th>" .$order_id ."...</th><th>" .$row['buyer_id'] ."</th><th>" .$row['product'] ."</th><th>" .$row['qty'] ."</th><th>" .$row['total_cmd'] ."</th></tr>";
 						}
 
 					?>

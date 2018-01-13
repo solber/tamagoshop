@@ -1,7 +1,7 @@
 <?php
 
 if (session_status() == PHP_SESSION_NONE) { session_start(); }
-if (isset($_SESSION['auth']->id)) 
+if (isset($_SESSION['auth']['id'])) 
 {
 	$_SESSION['flash']['danger'] = "You cannot acces this page.";
 	header('Location: index.php');
@@ -34,21 +34,30 @@ if (!empty($_POST))
 
 	    //login in
 	    require_once 'required/database.php';
-        $req = $pdo->prepare("SELECT * FROM users WHERE username = :username");
-        $req->execute(['username' => $_POST['logusername']]);
-        $user = $req->fetch();
-        
-        if(password_verify($_POST['logpsw'], $user->password)){
-            $_SESSION['auth'] = $user;
-            $_SESSION['flash']['success'] = "Connexion réussie !";
-            header('Location: index.php');
-            exit();
-        }else{
-            $_SESSION['flash']['danger'] = "Invalid username or password !";
-            header('Location: login.php');
-            exit();
+	    $pusername = mysqli_real_escape_string($mysqli, $_POST['logusername']);
+	    $ppsw = mysqli_real_escape_string($mysqli, $_POST['logpsw']);
 
-        }
+        if ($req = mysqli_query($mysqli, "SELECT * FROM users WHERE username='" .$pusername ."'"))
+        {
+        	$user = mysqli_fetch_assoc($req);
+
+	        if(password_verify($ppsw, $user['password'])){
+	            $_SESSION['auth'] = $user;
+	            $_SESSION['flash']['success'] = "Connexion réussie !";
+	            header('Location: index.php');
+	            exit();
+	        }else{
+	            $_SESSION['flash']['danger'] = "Invalid username or password !";
+	            header('Location: login.php');
+	            exit();
+	        }
+    	}
+    	else
+    	{
+    		$_SESSION['flash']['danger'] = "username doesent exist";
+	        header('Location: login.php');
+	        exit();
+    	}
 }
 ?>
 <!DOCTYPE html>
