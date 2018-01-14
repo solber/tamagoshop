@@ -17,6 +17,8 @@
 				require_once 'required/functions.php';
 				
 				$order_id = mysqli_real_escape_string($mysqli, str_random(60));
+				$total = floatval($_POST['total']);
+				$sub = 0;
 
 				foreach ($_SESSION['bought'] as $key => $value) {
 					if ($req = mysqli_query($mysqli, "SELECT qty FROM products WHERE id=" .intval($key)))
@@ -31,7 +33,12 @@
 						}
 						else
 						{
-							if (!($req = mysqli_query($mysqli, "INSERT INTO orders (id, buyer_id, cmd_id, product, qty, total_cmd) VALUES (NULL, '" .intval($_SESSION['auth']['id']) ."', '" .$order_id ."', '" .intval($key) ."', '" .intval($value) ."', '" .floatval($_POST['total']) ."')")))
+							if ($_POST['coupon'] === "42borntocode" && ($total - 1) >= 0 && $sub == 0)
+							{
+								$total -= 1;
+								$sub = 1;
+							}
+							if (!($req = mysqli_query($mysqli, "INSERT INTO orders (id, buyer_id, cmd_id, product, qty, total_cmd) VALUES (NULL, '" .intval($_SESSION['auth']['id']) ."', '" .$order_id ."', '" .intval($key) ."', '" .intval($value) ."', '" .floatval($total) ."')")))
 							{
 								$_SESSION['flash']['danger'] = "Error while processing to order.";
 								header('Location: cart.php');
@@ -96,6 +103,7 @@
 				if (isset($_SESSION['auth']['id']))
 				{
 					echo '<input name="total" type="text" style="visibility: hidden" value="' .floatval($total) .'">';
+					echo '<center><p>Coupon code :<input name="coupon" type="text"></p></center>';
 					echo '<center><input type="submit" name="buybtn" value="Buy" style="width: 200px; height: 30px;"></center>';	
 				}
 			echo '</form>';

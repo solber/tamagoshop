@@ -40,24 +40,25 @@ try
 							  `cmd_id` varchar(255) NOT NULL,
 							  `product` int(11) NOT NULL,
 							  `qty` int(11) NOT NULL,
-							  `total_cmd` float NOT NULL,
+							  `total_cmd` float(10,2) NOT NULL,
 							  PRIMARY KEY (`id`)
 							) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;");
 	$req = mysqli_query($mysqli, "DROP TABLE IF EXISTS `products`;");
-	$req = mysqli_query($mysqli, "CREATE TABLE IF NOT EXISTS `products` (
-								  `id` int(11) NOT NULL,
+	$req = mysqli_query($mysqli, "CREATE TABLE `products` (
+								  `id` int(11) NOT NULL AUTO_INCREMENT,
 								  `name` varchar(255) NOT NULL,
 								  `price` float(10,2) NOT NULL,
 								  `img` varchar(255) NOT NULL,
-								  `qty` int(11) NOT NULL
+								  `qty` int(11) NOT NULL,
+								  PRIMARY KEY (`id`)
 								) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	$req = mysqli_query($mysqli, "INSERT INTO `products` (`id`, `name`, `price`, `img`, `qty`) VALUES
 								(18, 'Red Tamagotchi', 4.00, 'img/red.jpg', 10),
 								(19, 'Blue Tamagotchi', 5.00, 'img/blue.jpg', 5),
-								(20, 'Orange Tamagotchi', 2.00, 'img/orange.jpg', 3),
-								(21, 'Purple Tamagotchi', 4.50, 'img/purple.jpg', 2),
-								(22, 'Blue Tamagotchi Family', 10.00, 'img/family-blue.jpg', 1),
-								(23, 'Green Tamagotchi Family', 10.00, 'img/family-green.jpg', 0),
+								(20, 'Orange Tamagotchi', 2.00, 'img/orange.jpg', 5),
+								(21, 'Purple Tamagotchi', 4.50, 'img/purple.jpg', 5),
+								(22, 'Blue Tamagotchi Family', 10.00, 'img/family-blue.jpg', 3),
+								(23, 'Green Tamagotchi Family', 10.00, 'img/family-green.jpg', 2),
 								(24, 'Green Tamagotchi', 3.50, 'img/green.jpg', 0);");
 	$req = mysqli_query($mysqli, "DROP TABLE IF EXISTS `prod_categorie`;");
 	$req = mysqli_query($mysqli, "CREATE TABLE IF NOT EXISTS `prod_categorie` (

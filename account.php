@@ -17,6 +17,8 @@ if (!empty($_POST))
 		if ($req = mysqli_query($mysqli, 'DELETE FROM users WHERE id=' .intval($_SESSION['auth']['id'])))
 		{
 			unset($_SESSION['auth']);
+			if (isset($_SESSION['cart']))
+				unset($_SESSION['cart']);
 			$_SESSION['flash']['success'] = "Account deleted.";
 			header('Location: index.php');
 			exit();	

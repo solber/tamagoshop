@@ -7,6 +7,8 @@
 	else
 	{
 		unset($_SESSION['auth']); 
+		if ($_SESSION['cart'])
+			unset($_SESSION['cart']);
 	}
 	header('Location: index.php');
 	exit();

@@ -76,7 +76,7 @@ if (!empty($_POST))
 	//adding product
 	if (isset($_POST['addbtn']))
 	{
-		if (empty($_POST['name']) || empty($_POST['price']) || !preg_match('/^[0-9.]+$/', $_POST['price']) || empty($_POST['img']) || empty($_POST['qty']))
+		if (empty($_POST['name']) || empty($_POST['price']) || !preg_match('/^[0-9.]+$/', $_POST['price']) || empty($_POST['img']) || empty($_POST['addqty']))
 		{
 			$_SESSION['flash']['danger'] = "Error : wrong values";
 			header('Location: manage_product.php');
@@ -87,7 +87,7 @@ if (!empty($_POST))
 			require_once 'required/database.php';
 			$pname = mysqli_real_escape_string($mysqli, $_POST['name']);
 			$pimg = mysqli_real_escape_string($mysqli, $_POST['img']);
-			if ($req = mysqli_query($mysqli, "INSERT INTO `products` (`id`, `name`, `price`, `img`, 'qty') VALUES (NULL, '".$pname ."', '" .floatval($_POST['price']) ."', '" .$pimg ."', '".intval($_POST['qty']) ."')"))
+			if ($req = mysqli_query($mysqli, "INSERT INTO products SET name='" .$pname ."', price='".floatval($_POST['price']) ."', img='".$pimg ."', qty='".intval($_POST['addqty']) ."'"))
 			{
 				$_SESSION['flash']['success'] = "Success : Item added";
 				header('Location: manage_product.php');
@@ -425,7 +425,7 @@ if (!empty($_POST))
 				<input type="text" name="name" placeholder="name">
 				<input type="text" name="price" placeholder="price">
 				<input type="text" name="img" placeholder="ex: img/file.jpg">
-				<input type="number" name="qty" min='0' placeholder="10">
+				<input type="number" name="addqty" min='0' placeholder="10">
 				<input type="submit" name="addbtn" value="Valider">
 			</form>
 			<label>Modify Product</label>
