@@ -80,6 +80,7 @@ try
 							  `id` int(11) NOT NULL AUTO_INCREMENT,
 							  `username` varchar(255) NOT NULL,
 							  `password` varchar(255) NOT NULL,
+							  `candraw` int(11) NOT NULL DEFAULT '2',
 							  PRIMARY KEY (`id`)
 							) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;");
 	//$file = file_get_contents('req.sql');

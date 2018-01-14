@@ -33,7 +33,7 @@
 						}
 						else
 						{
-							if ($_POST['coupon'] === "42borntocode" && ($total - 1) >= 0 && $sub == 0)
+							if ($_POST['coupon'] === "42born2code" && ($total - 1) >= 0 && $sub == 0)
 							{
 								$total -= 1;
 								$sub = 1;

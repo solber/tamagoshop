@@ -131,3 +131,9 @@ ul.products li {
     right: -200px;
 }
 
+.cards {
+    display: inline-flex;
+    width: 100%;
+    height: 100%;
+}
+

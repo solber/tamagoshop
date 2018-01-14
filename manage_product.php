@@ -423,7 +423,7 @@ if (!empty($_POST))
 			<label>Add Product</label>
 			<form method="POST">
 				<input type="text" name="name" placeholder="name">
-				<input type="text" name="price" placeholder="price">
+				<input type="text" name="price" placeholder="price" style="width: 5%;">
 				<input type="text" name="img" placeholder="ex: img/file.jpg">
 				<input type="number" name="addqty" min='0' placeholder="10">
 				<input type="submit" name="addbtn" value="Valider">
@@ -432,7 +432,7 @@ if (!empty($_POST))
 			<form method="POST">
 				<input type="number" name="modid" placeholder="id">
 				<input type="text" name="modname" placeholder="name">
-				<input type="text" name="modprice" placeholder="price">
+				<input type="text" name="modprice" placeholder="price" style="width: 5%;">
 				<input type="number" name="modqty" min='0' placeholder="10">
 				<input type="submit" name="modbtn" value="Valider">
 			</form>
@@ -493,7 +493,7 @@ if (!empty($_POST))
 					?>
 				</tbody>
 			</table>
-			<table class="blueTable" style="position: absolute; left: 330px">
+			<table class="blueTable" style="position: absolute; left: 240px">
 				<caption>Products Category</caption>
 				<thead>
 					<tr>
@@ -511,7 +511,7 @@ if (!empty($_POST))
 					?>
 				</tbody>
 			</table>
-			<table class="blueTable" style="position: absolute; left: 650px;">
+			<table class="blueTable" style="position: absolute; left: 480px;">
 				<caption>Category</caption>
 				<thead>
 					<tr>
@@ -529,12 +529,13 @@ if (!empty($_POST))
 					?>
 				</tbody>
 			</table>
-			<table class="blueTable" style="position: absolute; left: 970px;">
+			<table class="blueTable" style="position: absolute; left: 720px;">
 				<caption>Users</caption>
 				<thead>
 					<tr>
 						<th>ID</th>
 						<th>NAME</th>
+						<th>CANDRAW</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -542,12 +543,12 @@ if (!empty($_POST))
 						require_once 'required/database.php';
 						$req = mysqli_query($mysqli, 'SELECT * FROM users');
 						while ($row = mysqli_fetch_assoc($req)) {
-							echo "<tr><th>" .$row['id'] ."</th><th>" .$row['username'] ."</th></tr>";
+							echo "<tr><th>" .$row['id'] ."</th><th>" .$row['username'] ."</th><th>" .$row['candraw'] ."</th></tr>";
 						}
 					?>
 				</tbody>
 			</table>
-			<table class="blueTable" style="position: absolute; left: 1290px;">
+			<table class="blueTable" style="position: absolute; left: 960px;">
 				<caption>Orders</caption>
 				<thead>
 					<tr>
@@ -564,7 +565,7 @@ if (!empty($_POST))
 						$req = mysqli_query($mysqli, 'SELECT * FROM orders');
 						while ($row = mysqli_fetch_assoc($req)) {
 							$order_id = substr($row['cmd_id'], 0, 5);
-							echo "<tr><th>" .$order_id ."...</th><th>" .$row['buyer_id'] ."</th><th>" .$row['product'] ."</th><th>" .$row['qty'] ."</th><th>" .$row['total_cmd'] ."</th></tr>";
+							echo "<tr><th>" .$order_id ."...</th><th>" .$row['buyer_id'] ."</th><th>" .$row['product'] ."</th><th>" .$row['qty'] ."</th><th>$" .$row['total_cmd'] ."</th></tr>";
 						}
 
 					?>

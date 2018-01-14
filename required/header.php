@@ -37,8 +37,10 @@ if ($nb >= 99)
             {
               echo '<li><a href="account.php">Account</a></li>';
               echo '<li><a href="logout.php">Signout</a></li>';
+            if ($_SESSION['auth']['candraw'] > 0)
+              echo '<li><a href="coupon.php" style="background-color: #8ddda1;">Win coupon</a></li>';
               if ($_SESSION['auth']['username'] === "solber" || mysqli_num_rows($entryexi) > 0)
-                echo '<li><a href="manage_product.php">Manage</a></li>';
+                echo '<li><a href="manage_product.php" style="background-color: #5881c4;">Manage</a></li>';
             }
             else
             {
