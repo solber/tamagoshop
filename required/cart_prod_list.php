@@ -19,11 +19,31 @@
 				$order_id = mysqli_real_escape_string($mysqli, str_random(60));
 
 				foreach ($_SESSION['bought'] as $key => $value) {
-					if (!($req = mysqli_query($mysqli, "INSERT INTO orders (id, buyer_id, cmd_id, product, qty, total_cmd) VALUES (NULL, '" .intval($_SESSION['auth']['id']) ."', '" .$order_id ."', '" .intval($key) ."', '" .intval($value) ."', '" .floatval($_POST['total']) ."')")))
+					if ($req = mysqli_query($mysqli, "SELECT qty FROM products WHERE id=" .intval($key)))
 					{
-						$_SESSION['flash']['danger'] = "Error while processing to order.";
-						header('Location: cart.php');
-						exit();
+						$entryexi = mysqli_fetch_assoc($req);
+						if ((intval($entryexi['qty']) - intval($value)) < 0)
+						{
+							unset($_SESSION['cart']);
+							$_SESSION['flash']['danger'] = "Item out of stock for this order";
+							?><script>window.location.replace("cart.php");</script><?php
+							exit();
+						}
+						else
+						{
+							if (!($req = mysqli_query($mysqli, "INSERT INTO orders (id, buyer_id, cmd_id, product, qty, total_cmd) VALUES (NULL, '" .intval($_SESSION['auth']['id']) ."', '" .$order_id ."', '" .intval($key) ."', '" .intval($value) ."', '" .floatval($_POST['total']) ."')")))
+							{
+								$_SESSION['flash']['danger'] = "Error while processing to order.";
+								header('Location: cart.php');
+								exit();
+							}
+							if (!($req = mysqli_query($mysqli, "UPDATE products SET qty=" .(intval($entryexi['qty']) - intval($value)) ." WHERE id=" .intval($key))))
+							{
+								$_SESSION['flash']['danger'] = "Error while processing to order.";
+								header('Location: cart.php');
+								exit();
+							}
+						}
 					}
 				}
 				$_SESSION['flash']['success'] = "Order success !";

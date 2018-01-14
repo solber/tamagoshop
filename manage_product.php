@@ -76,7 +76,7 @@ if (!empty($_POST))
 	//adding product
 	if (isset($_POST['addbtn']))
 	{
-		if (empty($_POST['name']) || empty($_POST['price']) || !preg_match('/^[0-9.]+$/', $_POST['price']) || empty($_POST['img']))
+		if (empty($_POST['name']) || empty($_POST['price']) || !preg_match('/^[0-9.]+$/', $_POST['price']) || empty($_POST['img']) || empty($_POST['qty']))
 		{
 			$_SESSION['flash']['danger'] = "Error : wrong values";
 			header('Location: manage_product.php');
@@ -87,7 +87,7 @@ if (!empty($_POST))
 			require_once 'required/database.php';
 			$pname = mysqli_real_escape_string($mysqli, $_POST['name']);
 			$pimg = mysqli_real_escape_string($mysqli, $_POST['img']);
-			if ($req = mysqli_query($mysqli, "INSERT INTO `products` (`id`, `name`, `price`, `img`) VALUES (NULL, '".$pname ."', '" .floatval($_POST['price']) ."', '" .$pimg ."')"))
+			if ($req = mysqli_query($mysqli, "INSERT INTO `products` (`id`, `name`, `price`, `img`, 'qty') VALUES (NULL, '".$pname ."', '" .floatval($_POST['price']) ."', '" .$pimg ."', '".intval($_POST['qty']) ."')"))
 			{
 				$_SESSION['flash']['success'] = "Success : Item added";
 				header('Location: manage_product.php');
@@ -105,7 +105,7 @@ if (!empty($_POST))
 	//modifying product
 	if (isset($_POST['modbtn']))
 	{
-		if (empty($_POST['modid']) || empty($_POST['modname']) || empty($_POST['modprice']) || !preg_match('/^[0-9]+$/', $_POST['modid']) || !preg_match('/^[0-9.]+$/', $_POST['modprice']))
+		if (empty($_POST['modid']) || empty($_POST['modname']) || empty($_POST['modprice']) || !preg_match('/^[0-9]+$/', $_POST['modid']) || !preg_match('/^[0-9.]+$/', $_POST['modprice']) || empty($_POST['modqty']))
 		{
 			$_SESSION['flash']['danger'] = "Error : wrong values";
 			header('Location: manage_product.php');
@@ -118,7 +118,7 @@ if (!empty($_POST))
 	        $entryexi = mysqli_fetch_assoc($req);
 	        if ($entryexi)
 	        {
-				$sql = "UPDATE products SET name='".$_POST['modname']."', price='".floatval($_POST['modprice'])."' WHERE id='".intval($_POST['modid']) ."'";
+				$sql = "UPDATE products SET name='".$_POST['modname']."', price='".floatval($_POST['modprice'])."', qty='".intval($_POST['modqty']) ."' WHERE id='".intval($_POST['modid']) ."'";
 				if ($req = mysqli_query($mysqli, $sql))
 				{
 					$_SESSION['flash']['success'] = "Success : Item modified";
@@ -415,7 +415,7 @@ if (!empty($_POST))
 		<div style="border: 1px solid black; margin: 5px; padding: 5px; background: rgba(0, 0, 0, 0.1);">
 			<label>OP user</label>
 			<form method="POST">
-				<input type="text" name="opuser" placeholder="userid">
+				<input type="number" name="opuser" placeholder="userid">
 				<input type="submit" name="opbtn" value="op">
 			</form>
 		</div>
@@ -425,30 +425,32 @@ if (!empty($_POST))
 				<input type="text" name="name" placeholder="name">
 				<input type="text" name="price" placeholder="price">
 				<input type="text" name="img" placeholder="ex: img/file.jpg">
+				<input type="number" name="qty" min='0' placeholder="10">
 				<input type="submit" name="addbtn" value="Valider">
 			</form>
 			<label>Modify Product</label>
 			<form method="POST">
-				<input type="text" name="modid" placeholder="id">
+				<input type="number" name="modid" placeholder="id">
 				<input type="text" name="modname" placeholder="name">
 				<input type="text" name="modprice" placeholder="price">
+				<input type="number" name="modqty" min='0' placeholder="10">
 				<input type="submit" name="modbtn" value="Valider">
 			</form>
 			<label>Refer Categorie to Product</label>
 			<form method="POST">
-				<input type="text" name="prodid" placeholder="prodid">
-				<input type="text" name="catid" placeholder="catid">
+				<input type="number" name="prodid" placeholder="prodid">
+				<input type="number" name="catid" placeholder="catid">
 				<input type="submit" name="rcbtn" value="Valider">
 			</form>
 			<label>del Categorie to Product</label>
 			<form method="POST">
-				<input type="text" name="delprodid" placeholder="prodid">
-				<input type="text" name="delcatid" placeholder="catid">
+				<input type="number" name="delprodid" placeholder="prodid">
+				<input type="number" name="delcatid" placeholder="catid">
 				<input type="submit" name="dcbtn" value="Valider">
 			</form>
 			<label>Delete Product</label>
 			<form method="POST">
-				<input type="text" name="delproductid" placeholder="id">
+				<input type="number" name="delproductid" placeholder="id">
 				<input type="submit" name="dellbtn" value="Valider">
 			</form>
 		</div>
@@ -460,13 +462,13 @@ if (!empty($_POST))
 			</form>
 			<label>rm cat</label>
 			<form method="POST">
-				<input type="text" name="rmcid" placeholder="id">
+				<input type="number" name="rmcid" placeholder="id">
 				<input type="submit" name="rmcbtn" value="Valider">
 			</form>
 			<label>mod cat</label>
 			<form method="POST">
 				<input type="text" name="modcname" placeholder="name">
-				<input type="text" name="modcid" placeholder="catid">
+				<input type="number" name="modcid" placeholder="catid">
 				<input type="submit" name="modcbtn" value="Valider">
 			</form>
 		</div>
@@ -478,6 +480,7 @@ if (!empty($_POST))
 						<th>ID</th>
 						<th>NAME</th>
 						<th>PRICE</th>
+						<th>QTY</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -485,7 +488,7 @@ if (!empty($_POST))
 						require_once 'required/database.php';
 						$req = mysqli_query($mysqli, 'SELECT * FROM products');
 						while ($row = mysqli_fetch_assoc($req)) {
-							echo "<tr><th>" .$row['id'] ."</th><th>" .$row['name'] ."</th><th>" .$row['price'] ."</th></tr>";
+							echo "<tr><th>" .$row['id'] ."</th><th>" .$row['name'] ."</th><th>" .$row['price'] ."</th><th>" .$row['qty'] ."</th></tr>";
 						}
 					?>
 				</tbody>

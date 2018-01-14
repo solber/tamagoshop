@@ -45,19 +45,20 @@ try
 							) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;");
 	$req = mysqli_query($mysqli, "DROP TABLE IF EXISTS `products`;");
 	$req = mysqli_query($mysqli, "CREATE TABLE IF NOT EXISTS `products` (
-								  `id` int(11) NOT NULL AUTO_INCREMENT,
+								  `id` int(11) NOT NULL,
 								  `name` varchar(255) NOT NULL,
 								  `price` float(10,2) NOT NULL,
 								  `img` varchar(255) NOT NULL,
-								  PRIMARY KEY (`id`)
-								) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;");
-	$req = mysqli_query($mysqli, "INSERT INTO `products` (`id`, `name`, `price`, `img`) VALUES
-								(18, 'Red Tamagotchi', 4.00, 'img/red.jpg'),
-								(19, 'Blue Tamagotchi', 5.00, 'img/blue.jpg'),
-								(20, 'Orange Tamagotchi', 2.00, 'img/orange.jpg'),
-								(21, 'Purple Tamagotchi', 4.50, 'img/purple.jpg'),
-								(22, 'Blue Tamagotchi Family', 10.00, 'img/family-blue.jpg'),
-								(23, 'Green Tamagotchi Family', 10.00, 'img/family-green.jpg');");
+								  `qty` int(11) NOT NULL
+								) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+	$req = mysqli_query($mysqli, "INSERT INTO `products` (`id`, `name`, `price`, `img`, `qty`) VALUES
+								(18, 'Red Tamagotchi', 4.00, 'img/red.jpg', 10),
+								(19, 'Blue Tamagotchi', 5.00, 'img/blue.jpg', 5),
+								(20, 'Orange Tamagotchi', 2.00, 'img/orange.jpg', 3),
+								(21, 'Purple Tamagotchi', 4.50, 'img/purple.jpg', 2),
+								(22, 'Blue Tamagotchi Family', 10.00, 'img/family-blue.jpg', 1),
+								(23, 'Green Tamagotchi Family', 10.00, 'img/family-green.jpg', 0),
+								(24, 'Green Tamagotchi', 3.50, 'img/green.jpg', 0);");
 	$req = mysqli_query($mysqli, "DROP TABLE IF EXISTS `prod_categorie`;");
 	$req = mysqli_query($mysqli, "CREATE TABLE IF NOT EXISTS `prod_categorie` (
 								  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -85,6 +86,8 @@ try
 	if (session_status() == PHP_SESSION_NONE) { session_start(); }
 	if (isset($_SESSION['auth']))
 		unset($_SESSION['auth']);
+	if (isset($_SESSION['cart']))
+		unset($_SESSION['cart']);
 	$_SESSION['flash']['success'] = "Database set.";
 	header('Location: index.php');
 	exit();

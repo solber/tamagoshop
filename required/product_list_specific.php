@@ -16,8 +16,12 @@ if (isset($_GET))
 								<a href="add_to_cart.php?id=' .intval($row['id']) .'">
 									<img class="product-img" src="' .$row['img'] .'">
 									<center><h4 class="title">' .$row['name'] .'</h4><center>
-								</a>
-								<center><p class="price">$'.$row['price'] .'</p><center>    
+								</a>';
+						if ($row['qty'] > 0)
+							echo '<center><p class="price" style="color: green;">IN STOCK</p><center>';
+						else
+						echo '<center><p class="price" style="color: red;">OUT OF STOCK</p><center>';
+							echo '<center><p class="price">$'.$row['price'] .'</p><center>    
 							</li>';
 					}		
 				}
